@@ -14,6 +14,9 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      colors :{
+        'custom-dark': 'rgb(24, 24, 27)'
+      },
       animation: {
         aurora: "aurora 60s linear infinite",
       },

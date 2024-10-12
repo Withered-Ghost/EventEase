@@ -1,6 +1,6 @@
 import { Signup } from "./pages/signup"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import {Dashboard} from "./pages/dashboard"
+import {Dashboard} from "./pages/dashboard"
 function App() {
 
 
@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path="/" element ={<Signup />}></Route>
-      {/* <Route path="/home" element ={<DashBoard />}></Route> */}
+      <Route path="/home" element ={<Dashboard />}></Route>
     </Routes>
     </BrowserRouter>
 
