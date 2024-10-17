@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
-  }
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "6.9",
+    "mongoose": "^8.7.1"
+  },
+  "type": "module"
 }
