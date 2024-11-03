@@ -1,11 +1,24 @@
+// chat.route.js
 import { Router } from 'express';
-const chat = Router();
+import dotenv from 'dotenv';
+dotenv.config();
+const chatRouter = Router();
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
-//signup ka route
-chat.post('/send', async (req, res) => {
-        
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+chatRouter.post('/send', async (req, res) => {
+    const prompt = req.body.msg;
+    try {
+        const result = await model.generateContent(prompt);
+        res.status(200).json({
+            reply: result.response.text(),
+        });
+    } catch (error) {
+        console.error("Error generating response:", error);
+        res.status(500).json({ error: "Failed to generate response" });
+    }
 });
 
-module.exports = {
-    chatRouter : chat
-}
+export { chatRouter };
