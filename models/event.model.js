@@ -11,13 +11,12 @@ const eventSchema = new Schema(
         end_date: { type: Date},
         users: [
             {
-                user_id: { type: SchemaTypes.ObjectId},
-                role: { type: Number}
+                user_id: { type: SchemaTypes.ObjectId }
             }
         ],
         tasks: [
             {
-                task_id: { type: SchemaTypes.ObjectId}
+                task_id: { type: SchemaTypes.ObjectId }
             }
         ]
     },

@@ -10,9 +10,7 @@ const userSchema = new Schema(
         name: { type: String, required: [true, 'Name is required'] },
         events: [
             {
-                event_id: { type: SchemaTypes.ObjectId},
-                role: { type: Number, min: 0, max: 1}
-                // 0: admin, 1: user
+                event_id: { type: SchemaTypes.ObjectId }
             }
         ]
     },
