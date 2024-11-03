@@ -9,7 +9,7 @@ const eventSchema = new Schema(
         desc: { type: String },
         start_date: { type: Date, default: Date.now() },
         end_date: { type: Date},
-        users: [
+        members: [
             {
                 user_id: { type: SchemaTypes.ObjectId }
             }
