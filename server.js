@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/user.router.js'
 // import eventRouter from './routes/event.router.js'
 // import taskRouter from './routes/task.router.js'
+import chatRouter from "./routes/chat.router.js"
 
 dotenv.config({path: './.env'});
 
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use('/api/user', userRouter);
 // app.use('/api/event', eventRouter);
 // app.use('/api/task', taskRouter);
-// app.use('/api/chat', chatRouter);
+app.use('/api/chat', chatRouter);
 
 async function main() {
     await mongoose.connect(process.env.MONGODB_URI + process.env.MONGODB_EventEase);
