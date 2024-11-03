@@ -9,11 +9,7 @@ const taskSchema = new Schema(
         name: { type: String, required: [true, 'Task name is required'] },
         desc: { type: String },
         created_by: { type: SchemaTypes.ObjectId },
-        assigned_to: [
-            {
-                user_id: { type: SchemaTypes.ObjectId }
-            }
-        ],
+        assigned_to: { type: [SchemaTypes.ObjectId] },
         status: { type: Number, default: 2, min: 0, max: 2 },
         // 2: not started, 1: in progress, 0: completed
         created_at: { type: Date, default: Date.now() },

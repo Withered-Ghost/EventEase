@@ -9,16 +9,8 @@ const eventSchema = new Schema(
         desc: { type: String },
         start_date: { type: Date, default: Date.now() },
         end_date: { type: Date},
-        members: [
-            {
-                user_id: { type: SchemaTypes.ObjectId }
-            }
-        ],
-        tasks: [
-            {
-                task_id: { type: SchemaTypes.ObjectId }
-            }
-        ]
+        members: { type: [SchemaTypes.ObjectId] },
+        tasks: { type: [SchemaTypes.ObjectId] }
     },
     {
         timestamps: true
