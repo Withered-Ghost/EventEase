@@ -22,8 +22,8 @@ eventRouter.post('/create', async (req, res) => {
         const newEvent = new EventModel({
             name: name,
             desc: desc,
-            start_date: new Date(start_date),
-            end_date: new Date(end_date),
+            start_date: (start_date ? new Date(start_date) : undefined),
+            end_date: (end_date ? new Date(end_date) : undefined),
             members: member_ids
         });
 
@@ -62,20 +62,18 @@ eventRouter.get('/info/:user_id', async (req, res) => {
         }
 
         // get the event info
-        const event_info = {
-            events: []
-        };
+        const events = []
         for(const event_id of user.events) {
             const event = await EventModel.findOne({
                 _id: new mongoose.Types.ObjectId(event_id)
             });
-            if(event) event_info.events.push(event);
+            if(event) events.push(event);
         }
 
-        res.status(200).json(event_info);
+        res.status(200).json({ event_info: events });
     } catch (error) {
         console.log(error);
-        res.status(500).json({error: 'event info fetch failed'});
+        res.status(500).json({error: 'error fetching events'});
     }
 });
 

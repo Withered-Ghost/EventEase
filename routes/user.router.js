@@ -4,8 +4,10 @@ import UserModel from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import  dotenv  from 'dotenv';
+
 const userRouter = express.Router();
 dotenv.config();
+
 //signup ka route
 userRouter.post('/signup', async (req, res) => {
    
@@ -57,12 +59,10 @@ userRouter.post('/signin', async (req, res) => {
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (passwordMatch) {
             const token = jwt.sign(
-                { userId: user._id }, 
-                process.env.JWT_SECRET,           
-                { expiresIn: '24h' }  
+                { userId: user._id },
+                process.env.JWT_SECRET,
+                { expiresIn: '24h' }
             );
-
-            
             res.status(200).json({
                 token: token
             });
@@ -94,7 +94,7 @@ userRouter.get('/info/:user_id', async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({error: 'user info fetch failed'});
+        res.status(500).json({error: 'error fetching user'});
     }
 });
 
