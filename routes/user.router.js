@@ -2,19 +2,21 @@ import mongoose from 'mongoose';
 import express from 'express';
 import UserModel from '../models/user.model.js';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken';
+import  dotenv  from 'dotenv';
 const userRouter = express.Router();
-
+dotenv.config();
 //signup ka route
 userRouter.post('/signup', async (req, res) => {
+   
     try {
         const { email, password, name } = req.body;
-
+        console.log(email+" " + password+" " + name);
         const duplicateUser = await UserModel.findOne({
             email: email
         });
         if(duplicateUser) {
-            res.status(500).json({error: 'email already exists'});
+            res.status(501).json({error: 'email already exists'});
             return;
         }
 
@@ -41,29 +43,36 @@ userRouter.post('/signup', async (req, res) => {
 userRouter.post('/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        console.log(email + " " + password + " ");
+        
         const user = await UserModel.findOne({
             email: email
         });
 
-        if(!user) {
-            res.status(500).json({error: 'incorrect email/password'});
+        if (!user) {
+            res.status(401).json({ error: 'incorrect email/password' });
             return;
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if(passwordMatch) {
+        if (passwordMatch) {
+            const token = jwt.sign(
+                { userId: user._id }, 
+                process.env.JWT_SECRET,           
+                { expiresIn: '24h' }  
+            );
+
+            
             res.status(200).json({
-                user_id: user._id.toString()
+                token: token
             });
-        }
-        else {
-            res.status(500).json({error: 'incorrect email/password'});
+        } else {
+            res.status(401).json({ error: 'incorrect email/password' });
         }
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({error: 'login failed'});
+        res.status(500).json({ error: 'login failed' });
     }
 });
 
