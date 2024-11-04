@@ -66,7 +66,7 @@ userRouter.post('/signin', async (req, res) => {
     }
 });
 
-//userinfo  route
+//userinfo route
 userRouter.get('/info/:user_id', async (req, res) => {
     try {
         const { user_id } = req.params;

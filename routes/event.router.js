@@ -84,7 +84,7 @@ eventRouter.get('/info/:user_id/:event_id', async (req, res) => {
     }
 });
 
-eventRouter.post('/remove', async (req, res) => {
+eventRouter.post('/delete', async (req, res) => {
     try {
         const { user_id, event_id } = req.body;
 
