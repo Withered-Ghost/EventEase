@@ -80,7 +80,7 @@ taskRouter.get('/info/:event_id', async (req, res) => {
                     });
                     if(user) members.push(user.name);
                 }
-                tasks.push({task: task, members: members});
+                tasks.push({task: task, usernames: members});
             }
         }
 
