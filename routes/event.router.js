@@ -78,7 +78,7 @@ eventRouter.get('/info/:user_id', async (req, res) => {
                     });
                     if(user) members.push(user.name);
                 }
-                events.push({event: event, members: members});
+                events.push({event: event, usernames: members});
             }
         }
 
