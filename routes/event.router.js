@@ -9,11 +9,15 @@ eventRouter.post('/create', async (req, res) => {
     try {
         const { name, desc, start_date, end_date, user_id, members } = req.body;
 
-        members.unshift(user_id);
         const member_ids = [];
         for(const member of members) {
-            member_ids.push(new mongoose.Types.ObjectId(member));
+            // for each email, if that user exists
+            const user = await UserModel.findOne({
+                email: member
+            });
+            if(user) member_ids.push(user._id);
         }
+        member_ids.unshift(new mongoose.Types.ObjectId(user_id));
 
         const newEvent = new EventModel({
             name: name,
@@ -27,7 +31,7 @@ eventRouter.post('/create', async (req, res) => {
         const createdEvent = await EventModel.create(newEvent);
 
         for(const member_id of member_ids) {
-            await UserModel.update({
+            await UserModel.updateMany({
                 _id: member_id
             }, {
                 $push: {
@@ -57,6 +61,7 @@ eventRouter.get('/info/:user_id/:event_id', async (req, res) => {
     try {
         const { user_id, event_id } = req.params;
 
+        // check if user has access to event or not
         const user = await UserModel.findOne({
             _id: new mongoose.Types.ObjectId(user_id),
             events: new mongoose.Types.ObjectId(event_id)
@@ -67,6 +72,7 @@ eventRouter.get('/info/:user_id/:event_id', async (req, res) => {
             return;
         }
 
+        // get the event info
         const event = await EventModel.findOne({
             _id: new mongoose.Types.ObjectId(event_id)
         });
@@ -78,9 +84,45 @@ eventRouter.get('/info/:user_id/:event_id', async (req, res) => {
     }
 });
 
-// eventRouter.post('/remove', async (req, res) => {
-//     const { eventId } = req.body;
-// });
+eventRouter.post('/remove', async (req, res) => {
+    try {
+        const { user_id, event_id } = req.body;
+
+        // check if user has access to event or not
+        const user = await UserModel.findOne({
+            _id: new mongoose.Types.ObjectId(user_id),
+            events: new mongoose.Types.ObjectId(event_id)
+        });
+        if(!user) {
+            res.status(500).json({error: 'no match found'});
+            return;
+        }
+
+        const event = await EventModel.findOne({
+            _id: new mongoose.Types.ObjectId(event_id)
+        });
+        // delete the event
+        await EventModel.deleteOne({
+            _id: new mongoose.Types.ObjectId(event_id)
+        });
+
+        // remove event id from each member
+        for(const member of event.members) {
+            await UserModel.updateOne({
+                _id: member
+            }, {
+                $pull: {
+                    events: event._id
+                }
+            });
+        }
+
+        res.status(200).json(event);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error: 'event deletion failed'});
+    }
+});
 
 
 export default eventRouter;
