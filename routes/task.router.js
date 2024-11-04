@@ -73,7 +73,16 @@ taskRouter.get('/info/:event_id', async (req, res) => {
             const task = await TaskModel.findOne({
                 _id: new mongoose.Types.ObjectId(task_id)
             });
-            if(task) tasks.push(task);
+            if(task) {
+                const members = [];
+                for(const member of task.assigned_to) {
+                    const user = await UserModel.findOne({
+                        _id: member
+                    });
+                    if(user) members.push(user.name);
+                }
+                tasks.push({task: task, members: members});
+            }
         }
 
         res.status(200).json({ task_info: tasks });

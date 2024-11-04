@@ -67,7 +67,16 @@ eventRouter.get('/info/:user_id', async (req, res) => {
             const event = await EventModel.findOne({
                 _id: new mongoose.Types.ObjectId(event_id)
             });
-            if(event) events.push(event);
+            if(event) {
+                const members = [];
+                for(const member of event.members) {
+                    const user = await UserModel.findOne({
+                        _id: member
+                    });
+                    if(user) members.push(user.name);
+                }
+                events.push({event: event, members: members});
+            }
         }
 
         res.status(200).json({ event_info: events });
