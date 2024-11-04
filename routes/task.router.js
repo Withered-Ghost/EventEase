@@ -9,7 +9,7 @@ const taskRouter = express.Router();
 taskRouter.post('/create', async (req, res) => {
     try {
         const { event_id, name, desc, created_by, assigned_to, created_at, due_at} = req.body;
-
+        console.log("request Body"+ req.body);
         const event = await EventModel.findOne({
             _id: new mongoose.Types.ObjectId(event_id)
         });
@@ -67,7 +67,6 @@ taskRouter.get('/info/:event_id', async (req, res) => {
             return;
         }
 
-        // get the task info
         const tasks = [];
         for(const task_id of event.tasks) {
             const task = await TaskModel.findOne({
@@ -95,7 +94,7 @@ taskRouter.get('/info/:event_id', async (req, res) => {
 taskRouter.post('/update', async (req, res) => {
     try {
         const { task_id, status } = req.body;
-
+        console.log(req.body);
         await TaskModel.updateOne({
             _id: new mongoose.Types.ObjectId(task_id)
         }, {

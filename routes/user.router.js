@@ -87,6 +87,7 @@ userRouter.get('/info/:user_id', async (req, res) => {
         });
 
         if(user) {
+            console.log(user);
             res.status(200).json(user);
         }
         else {

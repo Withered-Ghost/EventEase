@@ -8,7 +8,8 @@ const eventRouter = express.Router();
 eventRouter.post('/create', async (req, res) => {
     try {
         const { name, desc, start_date, end_date, user_id, members } = req.body;
-
+        console.log(user_id);
+        const userIdObjectId = new mongoose.Types.ObjectId(user_id);
         const member_ids = [];
         for(const member of members) {
             // for each email, if that user exists
@@ -17,8 +18,10 @@ eventRouter.post('/create', async (req, res) => {
             });
             if(user) member_ids.push(user._id);
         }
-        member_ids.unshift(new mongoose.Types.ObjectId(user_id));
-
+        member_ids.push(userIdObjectId);
+        // member_ids.unshift(new mongoose.Types.ObjectId(user_id));
+        console.log(member_ids);
+        console.log(members);
         const newEvent = new EventModel({
             name: name,
             desc: desc,
