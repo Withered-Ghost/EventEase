@@ -18,8 +18,6 @@ app.use('/api/event', eventRouter);
 // app.use('/api/task', taskRouter);
 app.use('/api/chat', chatRouter);
 
-app.use('/api/chat', chatRouter);
-
 async function main() {
     await mongoose.connect(process.env.MONGODB_URI + process.env.MONGODB_EventEase);
     console.log('Connected to database');
