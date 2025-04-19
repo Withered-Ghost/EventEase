@@ -5,24 +5,23 @@ import EventModel from '../models/event.model.js';
 
 const eventRouter = express.Router();
 
+// create new event
 eventRouter.post('/create', async (req, res) => {
     try {
         const { name, desc, start_date, end_date, user_id, members } = req.body;
-        console.log(user_id);
-        const userIdObjectId = new mongoose.Types.ObjectId(user_id);
+        // console.log(name + " " + desc + " " + start_date + " " + end_date + " " + user_id + " " + members);
+
         const member_ids = [];
-        for(const member of members) {
-            // for each email, if that user exists
+        for (const member of members) {
+            // for each email, if that user exists, add to list
             const user = await UserModel.findOne({
                 email: member
             });
-            if(user) member_ids.push(user._id);
+            if (user) member_ids.push(user._id);
         }
-        member_ids.push(userIdObjectId);
-        // member_ids.unshift(new mongoose.Types.ObjectId(user_id));
-        console.log(member_ids);
-        console.log(members);
-        const newEvent = new EventModel({
+        member_ids.unshift(new mongoose.Types.ObjectId(user_id));
+
+        const new_event = new EventModel({
             name: name,
             desc: desc,
             start_date: (start_date ? new Date(start_date) : undefined),
@@ -30,26 +29,28 @@ eventRouter.post('/create', async (req, res) => {
             members: member_ids
         });
 
-        const createdEvent = await EventModel.create(newEvent);
+        const created_event = await EventModel.create(new_event);
 
-        for(const member_id of member_ids) {
+        for (const member_id of member_ids) {
             await UserModel.updateMany({
                 _id: member_id
             }, {
                 $push: {
-                    events: createdEvent._id
+                    events: created_event._id
                 }
             });
         }
 
+        // console.log(created_event);
         res.status(200).json(null);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'error creating event'});
+        // console.log(error);
+        res.status(500).json({ error: 'error creating event' });
         // 500 internal server error
     }
 });
 
+// get event info
 eventRouter.get('/info/:user_id', async (req, res) => {
     try {
         const { user_id } = req.params;
@@ -59,33 +60,34 @@ eventRouter.get('/info/:user_id', async (req, res) => {
             _id: new mongoose.Types.ObjectId(user_id)
         });
 
-        if(!user) {
-            res.status(500).json({error: 'no match found'});
+        if (!user) {
+            res.status(500).json({ error: 'no match found' });
             return;
         }
 
         // get the event info
-        const events = []
-        for(const event_id of user.events) {
+        const events = [];
+        for (const event_id of user.events) {
             const event = await EventModel.findOne({
                 _id: new mongoose.Types.ObjectId(event_id)
             });
-            if(event) {
+            if (event) {
                 const members = [];
-                for(const member of event.members) {
+                for (const member of event.members) {
                     const user = await UserModel.findOne({
                         _id: member
                     });
-                    if(user) members.push(user.name);
+                    if (user) members.push(user.name);
                 }
-                events.push({event: event, usernames: members});
+                events.push({ event: event, usernames: members });
             }
         }
 
+        // console.log(events);
         res.status(200).json({ event_info: events });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({error: 'error fetching events'});
+        // console.log(error);
+        res.status(500).json({ error: 'error fetching events' });
     }
 });
 

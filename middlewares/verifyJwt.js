@@ -1,19 +1,21 @@
-import  dotenv from "dotenv";
-dotenv.config();
+import dotenv from "dotenv";
 import jwt from 'jsonwebtoken';
+
+dotenv.config();
+
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers['Authorization'];
     const token = authHeader;
 
     if (!token) {
-        return res.status(401).json({ error: 'Access denied. No token provided.' });
+        return res.status(401).json({ error: 'unauthorized' });
     }
 
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        req.userId = verified.userId;
+        req.user_id = verified.user_id;
         next();
     } catch (error) {
-        res.status(401).json({ error: 'Invalid token' });
+        res.status(401).json({ error: 'unauthorized' });
     }
 };

@@ -8,7 +8,7 @@ const eventSchema = new Schema(
         name: { type: String, required: [true, 'Event name is required'] },
         desc: { type: String },
         start_date: { type: Date, default: Date.now() },
-        end_date: { type: Date},
+        end_date: { type: Date },
         members: { type: [SchemaTypes.ObjectId] },
         tasks: { type: [SchemaTypes.ObjectId] }
     },
