@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 
 const corsOptions = {
     origin: ['*'], // Add frontend/client URLs here
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Api-Version', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date'],
     credentials: true,
     optionsSuccessStatus: 200
@@ -27,7 +27,13 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', corsOptions.methods.join(','));
     res.header('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(','));
     res.header('Access-Control-Allow-Credentials', 'true');
-    next();
+
+    if (req.method === "OPTIONS") {
+        res.status(200).end();
+        return;
+    } else {
+        next();
+    }
 });
 
 // app.use('/',(req,res)=>{
