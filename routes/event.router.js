@@ -9,7 +9,7 @@ const eventRouter = express.Router();
 eventRouter.post('/create', async (req, res) => {
     try {
         const { name, desc, start_date, end_date, user_id, members } = req.body;
-        // console.log(name + " " + desc + " " + start_date + " " + end_date + " " + user_id + " " + members);
+        console.log(name + " " + desc + " " + start_date + " " + end_date + " " + user_id + " " + members);
 
         const member_ids = [];
         for (const member of members) {
@@ -41,10 +41,10 @@ eventRouter.post('/create', async (req, res) => {
             });
         }
 
-        // console.log(created_event);
+        console.log(created_event);
         res.status(200).json(null);
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error creating event' });
         // 500 internal server error
     }
@@ -83,10 +83,10 @@ eventRouter.get('/info/:user_id', async (req, res) => {
             }
         }
 
-        // console.log(events);
+        console.log(events);
         res.status(200).json({ event_info: events });
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error fetching events' });
     }
 });

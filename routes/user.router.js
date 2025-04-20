@@ -12,7 +12,7 @@ dotenv.config();
 userRouter.post('/signup', async (req, res) => {
     try {
         const { email, password, name } = req.body;
-        // console.log(email + " " + password + " " + name);
+        console.log(email + " " + password + " " + name);
 
         const duplicate_user = await UserModel.findOne({
             email: email
@@ -32,11 +32,11 @@ userRouter.post('/signup', async (req, res) => {
 
         const created_user = await UserModel.create(new_user);
 
-        // console.log(created_user);
+        console.log(created_user);
         res.status(200).json(null);
         // 200 ok
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'signup failed' });
         // 500 internal server error
     }
@@ -46,7 +46,7 @@ userRouter.post('/signup', async (req, res) => {
 userRouter.post('/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
-        // console.log(email + " " + password);
+        console.log(email + " " + password);
 
         const user = await UserModel.findOne({
             email: email
@@ -68,7 +68,7 @@ userRouter.post('/signin', async (req, res) => {
                 process.env.JWT_SECRET
             );
 
-            // console.log(token);
+            console.log(token);
             res.status(200).json({
                 token: token
             });
@@ -76,7 +76,7 @@ userRouter.post('/signin', async (req, res) => {
             res.status(401).json({ error: 'incorrect email/password' });
         }
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'login failed' });
     }
 });
@@ -92,14 +92,14 @@ userRouter.get('/info/:user_id', async (req, res) => {
         });
 
         if (user) {
-            // console.log(user);
+            console.log(user);
             res.status(200).json(user);
         }
         else {
             res.status(500).json({ error: 'no match found' });
         }
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error fetching user' });
     }
 });

@@ -10,7 +10,7 @@ const taskRouter = express.Router();
 taskRouter.post('/create', async (req, res) => {
     try {
         const { event_id, name, desc, created_by, assigned_to, created_at, due_at } = req.body;
-        // console.log(event_id + " " + name + " " + desc + " " + created_by + " " + assigned_to + " " + created_at + " " + due_at);
+        console.log(event_id + " " + name + " " + desc + " " + created_by + " " + assigned_to + " " + created_at + " " + due_at);
 
         const event = await EventModel.findOne({
             _id: new mongoose.Types.ObjectId(event_id)
@@ -48,10 +48,10 @@ taskRouter.post('/create', async (req, res) => {
             }
         });
 
-        // console.log(created_task);
+        console.log(created_task);
         res.status(200).json(null);
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error creating task' });
     }
 });
@@ -88,10 +88,10 @@ taskRouter.get('/info/:event_id', async (req, res) => {
             }
         }
 
-        // console.log(tasks);
+        console.log(tasks);
         res.status(200).json({ task_info: tasks });
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error fetching tasks' });
     }
 });
@@ -100,7 +100,7 @@ taskRouter.get('/info/:event_id', async (req, res) => {
 taskRouter.post('/update', async (req, res) => {
     try {
         const { task_id, status } = req.body;
-        // console.log(task_id + " " + status);
+        console.log(task_id + " " + status);
 
         await TaskModel.updateOne({
             _id: new mongoose.Types.ObjectId(task_id)
@@ -113,7 +113,7 @@ taskRouter.post('/update', async (req, res) => {
 
         res.status(200).json(null);
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         res.status(500).json({ error: 'error updating task' });
     }
 });
