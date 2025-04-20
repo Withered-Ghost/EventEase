@@ -23,10 +23,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', corsOptions.origin);
-    res.header('Access-Control-Allow-Methods', corsOptions.methods.join(','));
-    res.header('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(','));
-    res.header('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', corsOptions.origin);
+    res.setHeader('Access-Control-Allow-Methods', corsOptions.methods.join(','));
+    res.setHeader('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(','));
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     if (req.method === "OPTIONS") {
         res.status(200).end();
