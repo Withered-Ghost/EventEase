@@ -42,11 +42,11 @@ app.use(express.json());
 //     }
 // });
 
-app.use('/',(req,res)=>{
-    res.json({
-        msg : "Yes the backend is working"
-    })
-})
+// app.use('/',(req,res)=>{
+//     res.json({
+//         msg : "Yes the backend is working"
+//     })
+// })
 
 app.use('/api/user', userRouter);
 app.use('/api/event', eventRouter);
